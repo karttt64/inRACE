@@ -66,16 +66,48 @@ async function loadWeather() {
 
 let logs = [];
 function salvaSessione() {
-    const s = {
+    const data = {
         t: new Date().toLocaleTimeString(),
         c: document.getElementById('select_circuito').value,
-        b: document.getElementById('best').value
+        p: document.getElementById('driver').value,
+        s: document.getElementById('sessione').value,
+        b: document.getElementById('best').value,
+        pos: document.getElementById('pos').value,
+        // Meteo
+        tempA: document.getElementById('temp_aria').value,
+        tempAsf: document.getElementById('temp_asfalto').value,
+        cond: document.getElementById('cond_pista').value,
+        // Setup
+        rapporto: document.getElementById('rapporto').value,
+        spillo: document.getElementById('spillo').value,
+        // Pressioni
+        press: {
+            as: `${document.getElementById('as_in').value}/${document.getElementById('as_out').value}`,
+            ad: `${document.getElementById('ad_in').value}/${document.getElementById('ad_out').value}`,
+            ps: `${document.getElementById('ps_in').value}/${document.getElementById('ps_out').value}`,
+            pd: `${document.getElementById('pd_in').value}/${document.getElementById('pd_out').value}`
+        }
     };
-    logs.push(s);
-    const div = document.createElement('div');
-    div.className = 'summary';
-    div.innerHTML = `<b>${s.t}</b> - ${s.c} - Best: ${s.b}`;
-    document.getElementById('log').prepend(div);
+
+    logs.push(data);
+    function aggiornaLogVisivo(data) {
+        const div = document.createElement('div');
+        div.className = 'summary';
+        div.innerHTML = `
+            <div style="border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 8px;">
+                <b style="color: var(--primary);">${data.t}</b> | <b>${data.c}</b>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 0.8rem;">
+                <div>👤 <b>Pilota:</b> ${data.p} (${data.s})</div>
+                <div>⏱️ <b>Best:</b> ${data.b} | <b>Pos:</b> ${data.pos}</div>
+                <div>🌡️ <b>Meteo:</b> ${data.tempA}°A / ${data.tempAsf}°Asf</div>
+                <div>🛣️ <b>Pista:</b> ${data.cond}</div>
+                <div>🔧 <b>Setup:</b> ${data.rapporto} | Spillo: ${data.spillo}</div>
+                <div>🛞 <b>Press:</b> ${data.press.as} - ${data.press.ad} | ${data.press.ps} - ${data.press.pd}</div>
+            </div>
+        `;
+        document.getElementById('log').prepend(div);
+    }
 }
 
 function esportaCSV() {
