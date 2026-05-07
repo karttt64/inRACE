@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>KartLog Pro - RaceLand</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="main-wrapper">
+      <header>
+        <img
+          src="https://www.raceland.it/apple-icon.png?apple-icon.994b0f15.png"
+          alt="RaceLand Logo"
+          class="logo-img"
+        />
+      </header>
+
+      <h1>Setup Sessione</h1>
+
+      <section class="card">
+        <h2>☁️ Meteo Live Circuito</h2>
+        <div class="full-width">
+          <label for="select_circuito">Circuito</label>
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <select
+              id="select_circuito"
+              onchange="updateCircuitLink()"
+            ></select>
+            <a id="pista_url" href="#" target="_blank"
+              >🔗 Vai al sito della pista</a
+            >
+            <button
+              type="button"
+              class="btn btn-weather"
+              onclick="loadWeather()"
+            >
+              AGGIORNA METEO
+            </button>
+          </div>
+        </div>
+
+        <div class="meteo-inline-container">
+          <div class="meteo-field">
+            <label>ARIA (°C)</label>
+            <input
+              type="number"
+              id="temp_aria"
+              readonly
+              tabindex="-1"
+              class="input-readonly"
+            />
+          </div>
+          <div class="meteo-field">
+            <label>UMIDITÀ %</label>
+            <input
+              type="number"
+              id="umidita"
+              readonly
+              tabindex="-1"
+              class="input-readonly"
+            />
+          </div>
+          <div class="meteo-field">
+            <label>ASFALTO (°C)</label>
+            <input
+              type="number"
+              id="temp_asfalto"
+              readonly
+              tabindex="-1"
+              class="input-readonly"
+            />
+          </div>
+          <div class="meteo-field">
+            <label>METEO</label>
+            <input
+              type="text"
+              id="cond_meteo_live"
+              readonly
+              tabindex="-1"
+              class="input-readonly"
+            />
+          </div>
+        </div>
+        <p id="weather-status"></p>
+      </section>
+
+      <section class="card">
+        <h2>🛣️ Condizioni Pista</h2>
+        <div class="grid">
+          <div>
+            <label for="cond_pista">Stato</label>
+            <select id="cond_pista"></select>
+          </div>
+          <div>
+            <label for="gommatura">Gommatura</label>
+            <select id="gommatura"></select>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>⏱️ Performance</h2>
+        <div class="grid">
+          <div>
+            <label>Sessione</label
+            ><select id="sessione"></select>
+          </div>
+          <div>
+            <label>Pilota</label
+            ><select id="driver"></select>
+          </div>
+          <div>
+            <label>Best Lap</label
+            ><input type="text" id="best" placeholder="48.726" />
+          </div>
+          <div>
+            <label>Posizione</label
+            ><select id="pos"></select>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>🏎️ Assetto Telaio</h2>
+        <div class="grid">
+          <div>
+            <label>Camber</label
+            ><select id="camber"></select>
+          </div>
+          <div>
+            <label>Caster</label
+            ><select id="caster"></select>
+          </div>
+          <div>
+            <label>Convergenza</label
+            ><select id="convergenza"></select>
+          </div>
+          <div>
+            <label>Altezza ANT</label
+            ><select id="altezza_ant"></select>
+          </div>
+          <div>
+            <label>Altezza POST</label
+            ><select id="altezza_post"></select>
+          </div>
+          <div>
+            <label>Peso (Kg)</label
+            ><input type="number" id="peso" placeholder="165" />
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>🔧 Motore & Carb.</h2>
+        <div class="grid">
+          <div>
+            <label>Rapporto</label
+            ><select id="rapporto"></select>
+          </div>
+          <div>
+            <label>Spillo</label
+            ><input type="text" id="spillo" placeholder="K22" />
+          </div>
+          <div>
+            <label>Getto Max</label
+            ><input type="number" id="getto_max" placeholder="175" />
+          </div>
+          <div>
+            <label>Candela</label
+            ><input type="text" id="candela" placeholder="B10EG" />
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>🛞 Pressioni (Bar)</h2>
+
+        <div class="press-row">
+          <div class="press-block">
+            <label>ANT SX</label>
+            <div class="press-input-group">
+              <input
+                type="number"
+                id="as_in"
+                placeholder="In"
+                oninput="calcDelta()"
+              />
+              <input
+                type="number"
+                id="as_out"
+                placeholder="Out"
+                oninput="calcDelta()"
+              />
+            </div>
+            <div id="d_as" class="delta-box">Δ: --</div>
+          </div>
+          <div class="press-block">
+            <label>ANT DX</label>
+            <div class="press-input-group">
+              <input
+                type="number"
+                id="ad_in"
+                placeholder="In"
+                oninput="calcDelta()"
+              />
+              <input
+                type="number"
+                id="ad_out"
+                placeholder="Out"
+                oninput="calcDelta()"
+              />
+            </div>
+            <div id="d_ad" class="delta-box">Δ: --</div>
+          </div>
+        </div>
+
+        <div class="press-row">
+          <div class="press-block">
+            <label>POST SX</label>
+            <div class="press-input-group">
+              <input
+                type="number"
+                id="ps_in"
+                placeholder="In"
+                oninput="calcDelta()"
+              />
+              <input
+                type="number"
+                id="ps_out"
+                placeholder="Out"
+                oninput="calcDelta()"
+              />
+            </div>
+            <div id="d_ps" class="delta-box">Δ: --</div>
+          </div>
+          <div class="press-block">
+            <label>POST DX</label>
+            <div class="press-input-group">
+              <input
+                type="number"
+                id="pd_in"
+                placeholder="In"
+                oninput="calcDelta()"
+              />
+              <input
+                type="number"
+                id="pd_out"
+                placeholder="Out"
+                oninput="calcDelta()"
+              />
+            </div>
+            <div id="d_pd" class="delta-box">Δ: --</div>
+          </div>
+        </div>
+      </section>
+
+      <button type="button" class="btn" onclick="salvaSessione()">
+        SALVA SESSIONE
+      </button>
+      <button type="button" class="btn btn-export" onclick="esportaCSV()">
+        ESPORTA EXCEL (CSV)
+      </button>
+
+      <div id="log"></div>
+    </main>
+
+    <script src="config.js" defer></script>
+    <script src="script.js" defer></script>
+  </body>
+</html>
