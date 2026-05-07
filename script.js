@@ -1,10 +1,15 @@
-document.addEventListener('DOMContentLoaded', () => {
+/* ============================================================
+   KARTLOG PRO - LOGICA DI SISTEMA COMPLETA
+   ============================================================ */
+
+   document.addEventListener('DOMContentLoaded', () => {
     inizializzaApp();
 });
 
+// 1. INIZIALIZZAZIONE: Popolamento menu da config.js
 function inizializzaApp() {
     if (typeof CONFIG === 'undefined') {
-        console.error("Config non trovato!");
+        console.error("File config.js non trovato o non caricato correttamente.");
         return;
     }
 
@@ -29,93 +34,157 @@ function inizializzaApp() {
             el.innerHTML = data.map(val => `<option value="${val}">${val}</option>`).join('');
         }
     }
+    
+    // Imposta il link iniziale della pista
     updateCircuitLink();
 }
 
+// 2. AGGIORNAMENTO LINK SITO PISTA
 function updateCircuitLink() {
-    const val = document.getElementById('select_circuito').value;
+    const select = document.getElementById('select_circuito');
     const link = document.getElementById('pista_url');
-    const circ = CONFIG.circuiti.find(c => c.nome === val);
-    if (circ) { link.href = circ.url; link.style.display = 'block'; }
+    if (!select || !link) return;
+
+    const circ = CONFIG.circuiti.find(c => c.nome === select.value);
+    if (circ && circ.url) {
+        link.href = circ.url;
+        link.style.display = 'inline-block';
+    } else {
+        link.style.display = 'none';
+    }
 }
 
+// 3. CALCOLO DELTA PRESSIONI (In tempo reale)
 function calcDelta() {
-    ['as', 'ad', 'ps', 'pd'].forEach(id => {
-        const i = parseFloat(document.getElementById(id+'_in').value);
-        const o = parseFloat(document.getElementById(id+'_out').value);
-        const d = document.getElementById('d_'+id);
-        if (!isNaN(i) && !isNaN(o)) {
-            const res = (o - i).toFixed(2);
-            d.innerText = `Δ: ${res}`;
-            d.style.color = res > 0.15 ? "var(--primary)" : "var(--success)";
+    const wheels = ['as', 'ad', 'ps', 'pd'];
+    wheels.forEach(id => {
+        const inEl = document.getElementById(`${id}_in`);
+        const outEl = document.getElementById(`${id}_out`);
+        const deltaDisplay = document.getElementById(`d_${id}`);
+        
+        if (inEl && outEl && deltaDisplay) {
+            const valIn = parseFloat(inEl.value);
+            const valOut = parseFloat(outEl.value);
+            
+            if (!isNaN(valIn) && !isNaN(valOut)) {
+                const res = (valOut - valIn).toFixed(2);
+                deltaDisplay.innerText = `Δ: ${res}`;
+                // Colore dinamico: verde se entro 0.15, rosso se eccessivo
+                deltaDisplay.style.color = res > 0.15 ? "var(--primary)" : "var(--success)";
+            } else {
+                deltaDisplay.innerText = "Δ: --";
+                deltaDisplay.style.color = "var(--text-muted)";
+            }
         }
     });
 }
 
+// 4. RECUPERO METEO LIVE (Simulazione)
 async function loadWeather() {
     const status = document.getElementById('weather-status');
-    status.innerText = "Recupero...";
+    status.innerText = "⏳ Recupero dati in corso...";
+
+    // Simuliamo una chiamata API
     setTimeout(() => {
-        document.getElementById('temp_aria').value = "22°";
-        document.getElementById('umidita').value = "45%";
-        document.getElementById('temp_asfalto').value = "31°";
-        document.getElementById('cond_meteo_live').value = "Sole";
-        status.innerText = "Aggiornato: " + new Date().toLocaleTimeString();
-    }, 600);
+        document.getElementById('temp_aria').value = "21.5";
+        document.getElementById('umidita').value = "48";
+        document.getElementById('temp_asfalto').value = "30.0";
+        document.getElementById('cond_meteo_live').value = "Soleggiato";
+        
+        const ora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        status.innerHTML = `✅ Aggiornato alle: <b>${ora}</b>`;
+    }, 800);
 }
 
-let logs = [];
+// 5. SALVATAGGIO SESSIONE E LOG DETTAGLIATO
+let logsSalvati = [];
+
 function salvaSessione() {
+    // Raccolta dati completa
     const data = {
-        t: new Date().toLocaleTimeString(),
-        c: document.getElementById('select_circuito').value,
-        p: document.getElementById('driver').value,
-        s: document.getElementById('sessione').value,
-        b: document.getElementById('best').value,
+        ora: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        circuito: document.getElementById('select_circuito').value,
+        pilota: document.getElementById('driver').value,
+        sessione: document.getElementById('sessione').value,
+        best: document.getElementById('best').value || "N/A",
         pos: document.getElementById('pos').value,
-        // Meteo
-        tempA: document.getElementById('temp_aria').value,
-        tempAsf: document.getElementById('temp_asfalto').value,
-        cond: document.getElementById('cond_pista').value,
-        // Setup
+        aria: document.getElementById('temp_aria').value || "--",
+        asf: document.getElementById('temp_asfalto').value || "--",
+        pista: document.getElementById('cond_pista').value,
         rapporto: document.getElementById('rapporto').value,
-        spillo: document.getElementById('spillo').value,
-        // Pressioni
+        spillo: document.getElementById('spillo').value || "--",
         press: {
-            as: `${document.getElementById('as_in').value}/${document.getElementById('as_out').value}`,
-            ad: `${document.getElementById('ad_in').value}/${document.getElementById('ad_out').value}`,
-            ps: `${document.getElementById('ps_in').value}/${document.getElementById('ps_out').value}`,
-            pd: `${document.getElementById('pd_in').value}/${document.getElementById('pd_out').value}`
+            as: `${document.getElementById('as_in').value || '?'}/${document.getElementById('as_out').value || '?'}`,
+            ad: `${document.getElementById('ad_in').value || '?'}/${document.getElementById('ad_out').value || '?'}`,
+            ps: `${document.getElementById('ps_in').value || '?'}/${document.getElementById('ps_out').value || '?'}`,
+            pd: `${document.getElementById('pd_in').value || '?'}/${document.getElementById('pd_out').value || '?'}`
         }
     };
 
-    logs.push(data);
-    function aggiornaLogVisivo(data) {
-        const div = document.createElement('div');
-        div.className = 'summary';
-        div.innerHTML = `
-            <div style="border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 8px;">
-                <b style="color: var(--primary);">${data.t}</b> | <b>${data.c}</b>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 0.8rem;">
-                <div>👤 <b>Pilota:</b> ${data.p} (${data.s})</div>
-                <div>⏱️ <b>Best:</b> ${data.b} | <b>Pos:</b> ${data.pos}</div>
-                <div>🌡️ <b>Meteo:</b> ${data.tempA}°A / ${data.tempAsf}°Asf</div>
-                <div>🛣️ <b>Pista:</b> ${data.cond}</div>
-                <div>🔧 <b>Setup:</b> ${data.rapporto} | Spillo: ${data.spillo}</div>
-                <div>🛞 <b>Press:</b> ${data.press.as} - ${data.press.ad} | ${data.press.ps} - ${data.press.pd}</div>
-            </div>
-        `;
-        document.getElementById('log').prepend(div);
-    }
+    logsSalvati.push(data);
+    mostraAnteprimaLog(data);
 }
 
+function mostraAnteprimaLog(data) {
+    const logContainer = document.getElementById('log');
+    const entry = document.createElement('div');
+    entry.className = 'summary';
+    
+    // Generazione HTML dell'anteprima dettagliata (Foto 2)
+    entry.innerHTML = `
+        <div style="border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 10px; display: flex; justify-content: space-between;">
+            <span><b>${data.ora}</b> - ${data.circuito}</span>
+            <b style="color: var(--primary);">BEST: ${data.best}</b>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.85rem;">
+            <div>👤 <b>Pilota:</b> ${data.pilota} (${data.sessione})</div>
+            <div>🏆 <b>Posizione:</b> ${data.pos}</div>
+            <div>🌡️ <b>Meteo:</b> ${data.aria}°C Aria / ${data.asf}°C Asfalto</div>
+            <div>🛣️ <b>Pista:</b> ${data.pista}</div>
+            <div>🔧 <b>Setup:</b> Rapporto ${data.rapporto} | Spillo: ${data.spillo}</div>
+            <div>🛞 <b>Pressioni (In/Out):</b><br>
+                 ANT: ${data.press.as} | ${data.press.ad}<br>
+                 POST: ${data.press.ps} | ${data.press.pd}
+            </div>
+        </div>
+    `;
+    
+    // Inserisce il nuovo log in cima alla lista
+    logContainer.prepend(entry);
+}
+
+// 6. ESPORTAZIONE CSV (EXCEL)
 function esportaCSV() {
-    let csv = "Ora,Circuito,Best\n" + logs.map(l => `${l.t},${l.c},${l.b}`).join("\n");
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'KartLog.csv';
-    a.click();
+    if (logsSalvati.length === 0) {
+        alert("Nessuna sessione salvata da esportare!");
+        return;
+    }
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Ora,Circuito,Pilota,Sessione,Best Lap,Pos,Temp Aria,Temp Asfalto,Pista,Rapporto,Pressioni\n";
+
+    logsSalvati.forEach(l => {
+        const row = [
+            l.ora,
+            l.circuito,
+            l.pilota,
+            l.sessione,
+            l.best,
+            l.pos,
+            l.aria,
+            l.asf,
+            l.pista,
+            l.rapporto,
+            `${l.press.as}|${l.press.ad}|${l.press.ps}|${l.press.pd}`
+        ].join(",");
+        csvContent += row + "\n";
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `KartLog_Export_${new Date().toLocaleDateString().replace(/\//g, '-')}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
