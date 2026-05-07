@@ -3,73 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KartLog Pro - RaceLand</title>
+    <title>KartLog Pro</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
 <main class="main-wrapper">
-    <header>
-        <img src="https://www.raceland.it/apple-icon.png?apple-icon.994b0f15.png" alt="RaceLand Logo" class="logo-img">
-    </header>
-    
+    <header><img src="https://www.raceland.it/apple-icon.png?apple-icon.994b0f15.png" class="logo-img"></header>
     <h1>Setup Sessione</h1>
 
     <section class="card">
-        <h2>☁️ Meteo Live</h2>        
-        <div class="full-width">
-            <label>Circuito</label>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <select id="select_circuito" onchange="updateCircuitLink()"></select>
-                <a id="pista_url" href="#" target="_blank">🔗 Vai al sito della pista</a>
-                <button type="button" class="btn btn-weather" onclick="loadWeather()">Aggiorna Meteo</button>
-            </div>
-        </div>
+        <h2>☁️ Meteo Live</h2>
+        <select id="select_circuito" onchange="updateCircuitLink()"></select>
+        <a id="pista_url" href="#" target="_blank" style="display:none; margin: 10px 0;"> Vai al sito della pista</a>
+        <button class="btn btn-weather" onclick="loadWeather()">Aggiorna Meteo</button>
         <div class="meteo-inline-container">
             <div class="meteo-field"><label>Aria</label><input type="text" id="temp_aria" readonly class="input-readonly"></div>
-            <div class="meteo-field"><label>Umid.</label><input type="text" id="umidita" readonly class="input-readonly"></div>
             <div class="meteo-field"><label>Asf.</label><input type="text" id="temp_asfalto" readonly class="input-readonly"></div>
+            <div class="meteo-field"><label>Umid.</label><input type="text" id="umidita" readonly class="input-readonly"></div>
             <div class="meteo-field"><label>Stato</label><input type="text" id="cond_meteo_live" readonly class="input-readonly"></div>
         </div>
         <p id="weather-status"></p>
     </section>
 
     <section class="card">
-        <h2>🛣️ Pista</h2>
-        <div class="grid">
-            <div><label>Condizioni</label><select id="cond_pista"></select></div>
-            <div><label>Gommatura</label><select id="gommatura"></select></div>
-        </div>
-    </section>
-
-    <section class="card">
         <h2>⏱️ Performance</h2>
         <div class="grid">
-            <div><label>Sessione</label><select id="sessione"></select></div>
             <div><label>Pilota</label><select id="driver"></select></div>
+            <div><label>Sessione</label><select id="sessione"></select></div>
+            <div><label>Pista</label><select id="cond_pista"></select></div>
+            <div><label>Gommatura</label><select id="gommatura"></select></div>
             <div><label>Best Lap</label><input type="text" id="best" placeholder="48.726"></div>
             <div><label>Posizione</label><select id="pos"></select></div>
         </div>
     </section>
 
     <section class="card">
-        <h2>🏎️ Assetto</h2>
+        <h2>🏎️ Trasmissione</h2>
+        <div class="grid">
+            <div><label>Rapporto</label><select id="rapporto"></select></div>
+        </div>
+    </section>
+    <section class="card">
+        <h2>🏎️ Telaio</h2>
         <div class="grid">
             <div><label>Camber</label><select id="camber"></select></div>
             <div><label>Caster</label><select id="caster"></select></div>
             <div><label>Conv.</label><select id="convergenza"></select></div>
+            <div><label>Peso Kg</label><input type="number" id="peso" placeholder="165"></div>
             <div><label>Alt. ANT</label><select id="altezza_ant"></select></div>
             <div><label>Alt. POST</label><select id="altezza_post"></select></div>
-            <div><label>Peso Kg</label><input type="number" id="peso"></div>
         </div>
     </section>
-
     <section class="card">
-        <h2>🔧 Motore</h2>
+        <h2>🏎️ Motore</h2>
         <div class="grid">
-            <div><label>Rapporto</label><select id="rapporto"></select></div>
-            <div><label>Spillo</label><input type="text" id="spillo"></div>
-            <div><label>Candela</label><input type="text" id="candela"></div>
+            <div><label>Pos. spillo</label><select id="pos_spillo"></select></div>
+            <div><label>Candela</label><select id="candela"></select></div>
         </div>
     </section>
 
@@ -78,43 +67,32 @@
         <div class="press-row">
             <div class="press-block">
                 <label>ANT SX</label>
-                <div class="press-input-group">
-                    <input type="number" id="as_in" placeholder="In" oninput="calcDelta()">
-                    <input type="number" id="as_out" placeholder="Out" oninput="calcDelta()">
-                </div>
+                <div class="press-input-group"><input type="number" id="as_in" placeholder="In" oninput="calcDelta()"><input type="number" id="as_out" placeholder="Out" oninput="calcDelta()"></div>
                 <div id="d_as" class="delta-box">Δ: --</div>
             </div>
             <div class="press-block">
                 <label>ANT DX</label>
-                <div class="press-input-group">
-                    <input type="number" id="ad_in" placeholder="In" oninput="calcDelta()">
-                    <input type="number" id="ad_out" placeholder="Out" oninput="calcDelta()">
-                </div>
+                <div class="press-input-group"><input type="number" id="ad_in" placeholder="In" oninput="calcDelta()"><input type="number" id="ad_out" placeholder="Out" oninput="calcDelta()"></div>
                 <div id="d_ad" class="delta-box">Δ: --</div>
             </div>
         </div>
         <div class="press-row">
             <div class="press-block">
                 <label>POST SX</label>
-                <div class="press-input-group">
-                    <input type="number" id="ps_in" placeholder="In" oninput="calcDelta()">
-                    <input type="number" id="ps_out" placeholder="Out" oninput="calcDelta()">
-                </div>
+                <div class="press-input-group"><input type="number" id="ps_in" placeholder="In" oninput="calcDelta()"><input type="number" id="ps_out" placeholder="Out" oninput="calcDelta()"></div>
                 <div id="d_ps" class="delta-box">Δ: --</div>
             </div>
             <div class="press-block">
                 <label>POST DX</label>
-                <div class="press-input-group">
-                    <input type="number" id="pd_in" placeholder="In" oninput="calcDelta()">
-                    <input type="number" id="pd_out" placeholder="Out" oninput="calcDelta()">
-                </div>
+                <div class="press-input-group"><input type="number" id="pd_in" placeholder="In" oninput="calcDelta()"><input type="number" id="pd_out" placeholder="Out" oninput="calcDelta()"></div>
                 <div id="d_pd" class="delta-box">Δ: --</div>
             </div>
         </div>
     </section>
 
-    <button type="button" class="btn" onclick="salvaSessione()">Salva Sessione</button>
-    <button type="button" class="btn btn-export" onclick="esportaCSV()">Esporta Excel</button>
+    <button class="btn" onclick="salvaSessione()">Salva Sessione</button>
+    <button class="btn btn-export" onclick="esportaCSV()" style="background:#333">Esporta Tutto</button>
+    <div id="filtri-log" style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;"></div>
     <div id="log"></div>
 </main>
 
