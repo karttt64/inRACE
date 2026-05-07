@@ -1,10 +1,13 @@
 let databaseSessioni = JSON.parse(localStorage.getItem('kartLogDB')) || {};
 
+// Funzione di utilità per leggere i valori senza mandare in crash lo script
+const getV = (id) => {
+    const el = document.getElementById(id);
+    return el ? el.value : "--";
+};
+
 function inizializzaApp() {
-    if (typeof CONFIG === 'undefined') {
-        alert("Errore: config.js non caricato!");
-        return;
-    }
+    if (typeof CONFIG === 'undefined') return;
     const mapping = {
         'select_circuito': CONFIG.circuiti.map(c => c.nome),
         'driver': CONFIG.piloti,
@@ -31,41 +34,50 @@ function inizializzaApp() {
 
 document.addEventListener('DOMContentLoaded', inizializzaApp);
 
-function updateCircuitLink() {
-    const v = document.getElementById('select_circuito').value;
-    const l = document.getElementById('pista_url');
-    const c = CONFIG.circuiti.find(i => i.nome === v);
-    if (c) { l.href = c.url; l.style.display = 'block'; }
-}
-
 function salvaSessione() {
-    const p = document.getElementById('driver').value;
-    const d = {
-        id: Date.now(),
-        data: new Date().toLocaleDateString(),
-        ora: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
-        circ: document.getElementById('select_circuito').value,
-        pilota: p,
-        sess: document.getElementById('sessione').value,
-        best: document.getElementById('best').value || "--",
-        pos: document.getElementById('pos').value,
-        meteo: `${document.getElementById('temp_aria').value || '--'}°A / ${document.getElementById('temp_asfalto').value || '--'}°Asf`,
-        pista: document.getElementById('cond_pista').value,
-        setupM: `Rapp: ${document.getElementById('rapporto').value} | Spillo: ${document.getElementById('spillo').value || '--'} | Getto: ${document.getElementById('getto_max').value || '--'}`,
-        setupT: `Cb: ${document.getElementById('camber').value} | Cs: ${document.getElementById('caster').value} | Cv: ${document.getElementById('convergenza').value} | H: ${document.getElementById('altezza_ant').value}/${document.getElementById('altezza_post').value}`,
-        press: `ANT: ${document.getElementById('as_in').value}/${document.getElementById('as_out').value} - ${document.getElementById('ad_in').value}/${document.getElementById('ad_out').value} | POST: ${document.getElementById('ps_in').value}/${document.getElementById('ps_out').value} - ${document.getElementById('pd_in').value}/${document.getElementById('pd_out').value}`
-    };
-    if (!databaseSessioni[p]) { databaseSessioni[p] = []; aggiungiTabFiltro(p); }
-    databaseSessioni[p].push(d);
-    localStorage.setItem('kartLogDB', JSON.stringify(databaseSessioni));
-    mostraLogFiltrato(p);
+    try {
+        const p = getV('driver');
+        
+        const d = {
+            id: Date.now(),
+            data: new Date().toLocaleDateString(),
+            ora: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
+            circ: getV('select_circuito'),
+            pilota: p,
+            sess: getV('sessione'),
+            best: getV('best') || "--",
+            pos: getV('pos'),
+            meteo: `${getV('temp_aria')}°A / ${getV('temp_asfalto')}°Asf`,
+            pista: getV('cond_pista'),
+            setupM: `Rapp: ${getV('rapporto')} | Spillo: ${getV('pos_spillo')} | Getto: ${getV('getto_max')} | Candela: ${getV('candela')}`,
+            setupT: `Cb: ${getV('camber')} | Cs: ${getV('caster')} | Cv: ${getV('convergenza')} | H: ${getV('altezza_ant')}/${getV('altezza_post')} | Peso: ${getV('peso')}kg`,
+            press: `ANT: ${getV('as_in')}/${getV('as_out')} - ${getV('ad_in')}/${getV('ad_out')} | POST: ${getV('ps_in')}/${getV('ps_out')} - ${getV('pd_in')}/${getV('pd_out')}`
+        };
+
+        if (!databaseSessioni[p]) { 
+            databaseSessioni[p] = []; 
+            aggiungiTabFiltro(p); 
+        }
+        databaseSessioni[p].push(d);
+        localStorage.setItem('kartLogDB', JSON.stringify(databaseSessioni));
+        mostraLogFiltrato(p);
+        alert("Sessione salvata con successo!");
+    } catch (err) {
+        console.error(err);
+        alert("Errore durante il salvataggio. Controlla la console.");
+    }
 }
 
 function mostraLogFiltrato(nome) {
     document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-    document.getElementById('btn-f-' + nome)?.classList.add('active');
+    const btn = document.getElementById('btn-f-' + nome);
+    if (btn) btn.classList.add('active');
+
     const container = document.getElementById('log');
     container.innerHTML = `<h3 style="color:var(--primary); font-size:0.8rem; margin-top:20px;">📂 Cartella: ${nome}</h3>`;
+    
+    if (!databaseSessioni[nome]) return;
+
     databaseSessioni[nome].slice().reverse().forEach(s => {
         const div = document.createElement('div');
         div.className = 'summary';
@@ -80,7 +92,7 @@ function mostraLogFiltrato(nome) {
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.8rem;">
                 <div>⏱️ <b>Sess:</b> ${s.sess} (Pos: ${s.pos})</div>
                 <div>🌡️ <b>Meteo:</b> ${s.meteo} (${s.pista})</div>
-                <div style="grid-column:1/-1; background:#f9f9f9; padding:5px; border-radius:4px;">🔧 <b>Setup:</b> ${s.setupM}<br>${s.setupT}</div>
+                <div style="grid-column:1/-1; background:#f9f9f9; padding:5px; border-radius:4px;">🔧 <b>Motore:</b> ${s.setupM}<br>🏎️ <b>Telaio:</b> ${s.setupT}</div>
                 <div style="grid-column:1/-1;">🛞 <b>Press:</b> ${s.press}</div>
             </div>`;
         container.appendChild(div);
@@ -97,74 +109,72 @@ function aggiungiTabFiltro(n) {
 }
 
 function eliminaSessione(p, id) {
-    if(confirm("Eliminare?")) {
+    if(confirm("Eliminare la sessione?")) {
         databaseSessioni[p] = databaseSessioni[p].filter(x => x.id !== id);
-        if(databaseSessioni[p].length === 0) { delete databaseSessioni[p]; localStorage.setItem('kartLogDB', JSON.stringify(databaseSessioni)); location.reload(); }
-        else { localStorage.setItem('kartLogDB', JSON.stringify(databaseSessioni)); mostraLogFiltrato(p); }
+        if(databaseSessioni[p].length === 0) { 
+            delete databaseSessioni[p]; 
+            localStorage.setItem('kartLogDB', JSON.stringify(databaseSessioni)); 
+            location.reload(); 
+        } else { 
+            localStorage.setItem('kartLogDB', JSON.stringify(databaseSessioni)); 
+            mostraLogFiltrato(p); 
+        }
     }
+}
+
+function updateCircuitLink() {
+    const v = document.getElementById('select_circuito').value;
+    const l = document.getElementById('pista_url');
+    const c = CONFIG.circuiti.find(i => i.nome === v);
+    if (c && l) { l.href = c.url; l.style.display = 'block'; }
 }
 
 function calcDelta() {
     ['as','ad','ps','pd'].forEach(w => {
-        const i = parseFloat(document.getElementById(w+'_in').value);
-        const o = parseFloat(document.getElementById(w+'_out').value);
+        const iEl = document.getElementById(w+'_in');
+        const oEl = document.getElementById(w+'_out');
         const d = document.getElementById('d_'+w);
-        if(!isNaN(i) && !isNaN(o)) { d.innerText = "Δ: " + (o-i).toFixed(2); d.style.color = (o-i) > 0.15 ? "var(--primary)" : "var(--success)"; }
+        if(iEl && oEl && d) {
+            const i = parseFloat(iEl.value);
+            const o = parseFloat(oEl.value);
+            if(!isNaN(i) && !isNaN(o)) { 
+                d.innerText = "Δ: " + (o-i).toFixed(2); 
+                d.style.color = (o-i) > 0.15 ? "var(--primary)" : "var(--success)"; 
+            }
+        }
     });
 }
 
 async function loadWeather() {
     const status = document.getElementById('weather-status');
-    const circuitoNome = document.getElementById('select_circuito').value;
-    
-    // Trova i dati del circuito nel config per avere le coordinate
-    const circData = CONFIG.circuiti.find(c => c.nome === circuitoNome);
-
-    if (!circData || !circData.lat) {
-        status.innerText = "❌ Coordinate non trovate per questa pista.";
-        return;
-    }
-
-    status.innerText = "⏳ Collegamento satellitare...";
-
+    const circNome = document.getElementById('select_circuito').value;
+    const circData = CONFIG.circuiti.find(c => c.nome === circNome);
+    if (!circData) return;
+    status.innerText = "⏳ Aggiornamento...";
     try {
-        // Chiamata all'API Open-Meteo usando lat e lon della pista
         const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${circData.lat}&longitude=${circData.lon}&current=temperature_2m,relative_humidity_2m,weather_code&timezone=auto`);
         const data = await response.json();
-
         if (data.current) {
-            const temp = data.current.temperature_2m;
-            const umid = data.current.relative_humidity_2m;
-            const code = data.current.weather_code;
-
-            // Inserisce i dati reali nei campi
-            document.getElementById('temp_aria').value = temp;
-            document.getElementById('umidita').value = umid;
-            
-            // Calcolo approssimativo temperatura asfalto (Aria + 10° se c'è sole, Aria + 2° se nuvoloso)
-            let stimaAsfalto = (code < 3) ? (temp + 12).toFixed(1) : (temp + 3).toFixed(1);
-            document.getElementById('temp_asfalto').value = stimaAsfalto;
-
-            // Traduzione codice meteo
-            const desc = {
-                0: "Soleggiato", 1: "Quasi Sole", 2: "Parz. Nuvoloso", 3: "Coperto",
-                45: "Nebbia", 51: "Pioggerella", 61: "Pioggia", 80: "Rovescio"
-            };
-            document.getElementById('cond_meteo_live').value = desc[code] || "Variabile";
-
-            status.innerHTML = `✅ Meteo reale aggiornato alle <b>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</b>`;
+            document.getElementById('temp_aria').value = data.current.temperature_2m;
+            document.getElementById('umidita').value = data.current.relative_humidity_2m;
+            document.getElementById('temp_asfalto').value = (data.current.weather_code < 3) ? (data.current.temperature_2m + 12).toFixed(1) : (data.current.temperature_2m + 3).toFixed(1);
+            document.getElementById('cond_meteo_live').value = data.current.weather_code < 3 ? "Sole" : "Variabile";
+            status.innerHTML = `✅ Meteo aggiornato alle ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
         }
-    } catch (error) {
-        console.error(error);
-        status.innerText = "❌ Errore di connessione meteo.";
-    }
+    } catch (e) { status.innerText = "❌ Errore meteo."; }
 }
 
 function esportaCSV() {
-    let csv = "Data,Ora,Pilota,Circuito,Best,Setup,Pressioni\n";
-    Object.values(databaseSessioni).flat().forEach(s => {
-        csv += `${s.data},${s.ora},${s.pilota},${s.circ},${s.best},"${s.setupM} ${s.setupT}","${s.press}"\n`;
+    if (Object.keys(databaseSessioni).length === 0) return alert("Nessun dato!");
+    let csv = "\ufeffData,Ora,Pilota,Circuito,Best,Motore,Telaio,Pressioni\n";
+    Object.keys(databaseSessioni).forEach(pNome => {
+        databaseSessioni[pNome].forEach(s => {
+            csv += `${s.data},${s.ora},${pNome},${s.circ},${s.best},"${s.setupM}","${s.setupT}","${s.press}"\n`;
+        });
     });
-    const b = new Blob([csv], {type:'text/csv'});
-    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download='KartLog.csv'; a.click();
+    const b = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = 'KartLog_Export.csv';
+    a.click();
 }
