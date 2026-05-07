@@ -49,7 +49,7 @@
             <div><label>Camber</label><select id="camber"></select></div>
             <div><label>Caster</label><select id="caster"></select></div>
             <div><label>Conv.</label><select id="convergenza"></select></div>
-            <div><label>Peso Kg</label><input type="number" id="peso" placeholder="165"></div>
+            <div><label>Peso Kg</label><input type="number" id="peso" inputmode="numeric" placeholder="165"></div>
             <div><label>Alt. ANT</label><select id="altezza_ant"></select></div>
             <div><label>Alt. POST</label><select id="altezza_post"></select></div>
         </div>
@@ -57,36 +57,46 @@
     <section class="card">
         <h2>🏎️ Motore</h2>
         <div class="grid">
-            <div><label>Rapporto</label><select id="rapporto"></select></div>
-            <div><label>Getto Max</label><input type="number" id="getto_max" placeholder="175"></div>
             <div><label>Pos. spillo</label><select id="pos_spillo"></select></div>
             <div><label>Candela</label><select id="candela"></select></div>
         </div>
     </section>
 
     <section class="card">
-        <h2>🛞 Pressioni</h2>
+        <h2>🛞 Pressioni (Bar)</h2>
         <div class="press-row">
             <div class="press-block">
                 <label>ANT SX</label>
-                <div class="press-input-group"><input type="number" id="as_in" placeholder="In" oninput="calcDelta()"><input type="number" id="as_out" placeholder="Out" oninput="calcDelta()"></div>
+                <div class="press-input-group">
+                    <input type="number" id="as_in" step="0.01" inputmode="decimal" placeholder="In" oninput="calcDelta()">
+                    <input type="number" id="as_out" step="0.01" inputmode="decimal" placeholder="Out" oninput="calcDelta()">
+                </div>
                 <div id="d_as" class="delta-box">Δ: --</div>
             </div>
             <div class="press-block">
                 <label>ANT DX</label>
-                <div class="press-input-group"><input type="number" id="ad_in" placeholder="In" oninput="calcDelta()"><input type="number" id="ad_out" placeholder="Out" oninput="calcDelta()"></div>
+                <div class="press-input-group">
+                    <input type="number" id="ad_in" step="0.01" inputmode="decimal" placeholder="In" oninput="calcDelta()">
+                    <input type="number" id="ad_out" step="0.01" inputmode="decimal" placeholder="Out" oninput="calcDelta()">
+                </div>
                 <div id="d_ad" class="delta-box">Δ: --</div>
             </div>
         </div>
         <div class="press-row">
             <div class="press-block">
                 <label>POST SX</label>
-                <div class="press-input-group"><input type="number" id="ps_in" placeholder="In" oninput="calcDelta()"><input type="number" id="ps_out" placeholder="Out" oninput="calcDelta()"></div>
+                <div class="press-input-group">
+                    <input type="number" id="ps_in" step="0.01" inputmode="decimal" placeholder="In" oninput="calcDelta()">
+                    <input type="number" id="ps_out" step="0.01" inputmode="decimal" placeholder="Out" oninput="calcDelta()">
+                </div>
                 <div id="d_ps" class="delta-box">Δ: --</div>
             </div>
             <div class="press-block">
                 <label>POST DX</label>
-                <div class="press-input-group"><input type="number" id="pd_in" placeholder="In" oninput="calcDelta()"><input type="number" id="pd_out" placeholder="Out" oninput="calcDelta()"></div>
+                <div class="press-input-group">
+                    <input type="number" id="pd_in" step="0.01" inputmode="decimal" placeholder="In" oninput="calcDelta()">
+                    <input type="number" id="pd_out" step="0.01" inputmode="decimal" placeholder="Out" oninput="calcDelta()">
+                </div>
                 <div id="d_pd" class="delta-box">Δ: --</div>
             </div>
         </div>
