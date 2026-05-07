@@ -61,7 +61,7 @@ function salvaSessione() {
         databaseSessioni[p].push(d);
         localStorage.setItem('kartLogDB', JSON.stringify(databaseSessioni));
         mostraLogFiltrato(p);
-        alert("Sessione salvata con successo!");
+        /* alert("Sessione salvata con successo!"); */
     } catch (err) {
         console.error(err);
         alert("Errore durante il salvataggio. Controlla la console.");
