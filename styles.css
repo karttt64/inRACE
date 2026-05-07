@@ -1,6 +1,7 @@
 :root {
   --primary: #d32f2f;
   --secondary: #1e88e5;
+  --success: #2e7d32;
   --bg-body: #f0f2f5;
   --bg-card: #ffffff;
   --text-main: #1a1a1a;
@@ -11,7 +12,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI', system-ui, sans-serif;
   background-color: var(--bg-body);
   color: var(--text-main);
   margin: 0; padding: 15px;
@@ -23,6 +24,7 @@ body {
 header {
   background: #111; padding: 25px; text-align: center;
   border-radius: var(--radius); margin-bottom: 20px;
+  box-shadow: var(--shadow);
 }
 
 .logo-img { max-width: 150px; }
@@ -35,7 +37,7 @@ h1 { text-align: center; text-transform: uppercase; font-weight: 800; margin: 20
   border-top: 5px solid var(--primary);
 }
 
-h2 { font-size: 0.9rem; color: var(--primary); text-transform: uppercase; margin-bottom: 15px; font-weight: 700; }
+h2 { font-size: 0.9rem; color: var(--primary); text-transform: uppercase; margin-bottom: 15px; font-weight: 700; border-bottom: 1px solid #eee; padding-bottom: 8px; }
 
 label { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; display: block; }
 
@@ -44,21 +46,20 @@ input, select {
   border-radius: 8px; padding: 0 12px; font-size: 1rem; box-sizing: border-box;
 }
 
-/* GRID & FLEX */
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-.meteo-inline-container { display: flex !important; gap: 8px; margin-top: 10px; }
+.meteo-inline-container { display: flex; gap: 8px; margin-top: 10px; }
 .meteo-field { flex: 1; min-width: 0; }
-.input-readonly { background-color: #f9f9f9 !important; text-align: center; font-weight: bold; }
+.input-readonly { background-color: #f9f9f9 !important; text-align: center; font-weight: bold; border: 1px dashed #ccc; }
 
-.press-row { display: flex !important; gap: 12px; margin-bottom: 15px; }
+.press-row { display: flex; gap: 12px; margin-bottom: 15px; }
 .press-block { flex: 1; min-width: 0; }
 .press-input-group { display: flex; gap: 4px; }
-.press-input-group input { flex: 1; text-align: center; padding: 0; }
+.press-input-group input { flex: 1; text-align: center; padding: 0; font-size: 0.9rem; }
 
 .delta-box {
   margin-top: 5px; font-size: 0.75rem; font-weight: bold; color: var(--primary);
-  background: #fff5f5; border: 1px dashed var(--primary); text-align: center; padding: 2px 0;
+  background: #fff5f5; border: 1px dashed var(--primary); text-align: center; padding: 3px 0; border-radius: 4px;
 }
 
 .btn {
@@ -68,5 +69,8 @@ input, select {
 }
 
 .btn-weather { background: var(--secondary) !important; height: 48px; margin: 0; }
+.btn-export { background: var(--success) !important; margin-bottom: 40px; }
 
-#pista_url { color: var(--secondary); text-decoration: none; font-size: 0.85rem; font-weight: bold; display: block; margin: 5px 0 10px 0; }
+#pista_url { color: var(--secondary); text-decoration: none; font-size: 0.85rem; font-weight: bold; display: block; margin: 8px 0; }
+#weather-status { font-size: 0.75rem; text-align: center; font-style: italic; color: var(--text-muted); margin-top: 10px; }
+.summary { background: #fff; border-left: 5px solid var(--primary); padding: 12px; margin-top: 10px; box-shadow: var(--shadow); border-radius: 4px; font-size: 0.85rem; }
