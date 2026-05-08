@@ -118,10 +118,33 @@ function eliminaSessione(p, id) {
 }
 
 function updateCircuitLink() {
-    const v = document.getElementById('select_circuito').value;
-    const l = document.getElementById('pista_url');
-    const c = CONFIG.circuiti.find(i => i.nome === v);
-    if (c && l) { l.href = c.url; l.style.display = 'block'; }
+    const nomePista = document.getElementById('select_circuito').value;
+    const btnCal = document.getElementById('btn-apri-calendario');
+    const infoPista = document.getElementById('info-pista-selezionata');
+    const linkPistaVecchi = document.getElementById('pista_url'); // Il vecchio link se lo hai ancora
+
+    // Trova i dati nel config
+    const pistaData = CONFIG.circuiti.find(c => c.nome === nomePista);
+
+    if (pistaData) {
+        // Aggiorna il bottone del calendario
+        btnCal.style.display = 'flex';
+        btnCal.href = pistaData.cal;
+
+        // Aggiorna il testo informativo
+        infoPista.innerHTML = `
+            <div style="border-left: 3px solid var(--primary); padding-left: 10px;">
+                <strong>${pistaData.nome}</strong><br>
+                <small>Clicca il tasto sotto per verificare orari, turni privati e giornate di chiusura per gare.</small>
+            </div>
+        `;
+
+        // Se hai ancora il vecchio link "Vai al sito della pista" sotto al meteo
+        if (linkPistaVecchi) {
+            linkPistaVecchi.href = pistaData.url;
+            linkPistaVecchi.style.display = 'block';
+        }
+    }
 }
 
 function calcDelta() {
