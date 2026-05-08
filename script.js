@@ -1,6 +1,5 @@
 let databaseSessioni = JSON.parse(localStorage.getItem('kartLogDB')) || {};
 
-// Funzione di utilità per leggere i valori senza mandare in crash lo script
 const getV = (id) => {
     const el = document.getElementById(id);
     return el ? el.value : "--";
@@ -9,8 +8,8 @@ const getV = (id) => {
 function inizializzaApp() {
     if (typeof CONFIG === 'undefined') return;
     const mapping = {
-        'select_circuito': CONFIG.circuiti.map(c => c.nome),
-        'driver': CONFIG.piloti,
+        'select_circuito': CONFIG.circuiti.map(c => c.nome).sort(),
+        'driver': CONFIG.piloti.sort(),
         'sessione': CONFIG.sessioni,
         'cond_pista': CONFIG.condizioni,
         'gommatura': CONFIG.gommatura,
@@ -21,8 +20,8 @@ function inizializzaApp() {
         'altezza_ant': CONFIG.setup.altezze,
         'altezza_post': CONFIG.setup.altezze,
         'rapporto': CONFIG.setup.rapporti,
-        'pos_spillo': CONFIG.setup.pos_spillo,
-        'candela': CONFIG.setup.candela
+        'pos_spillo': CONFIG.setup.pos_spillo.sort(),
+        'candela': CONFIG.setup.candela.sort()
     };
     for (const [id, data] of Object.entries(mapping)) {
         const el = document.getElementById(id);
@@ -37,7 +36,6 @@ document.addEventListener('DOMContentLoaded', inizializzaApp);
 function salvaSessione() {
     try {
         const p = getV('driver');
-        
         const d = {
             id: Date.now(),
             data: new Date().toLocaleDateString(),
@@ -54,18 +52,12 @@ function salvaSessione() {
             press: `ANT: ${getV('as_in')}/${getV('as_out')} - ${getV('ad_in')}/${getV('ad_out')} | POST: ${getV('ps_in')}/${getV('ps_out')} - ${getV('pd_in')}/${getV('pd_out')}`
         };
 
-        if (!databaseSessioni[p]) { 
-            databaseSessioni[p] = []; 
-            aggiungiTabFiltro(p); 
-        }
+        if (!databaseSessioni[p]) { databaseSessioni[p] = []; aggiungiTabFiltro(p); }
         databaseSessioni[p].push(d);
         localStorage.setItem('kartLogDB', JSON.stringify(databaseSessioni));
         mostraLogFiltrato(p);
-        /* alert("Sessione salvata con successo!"); */
-    } catch (err) {
-        console.error(err);
-        alert("Errore durante il salvataggio. Controlla la console.");
-    }
+        alert("Sessione salvata con successo!");
+    } catch (err) { alert("Errore nel salvataggio."); }
 }
 
 function mostraLogFiltrato(nome) {
@@ -74,7 +66,7 @@ function mostraLogFiltrato(nome) {
     if (btn) btn.classList.add('active');
 
     const container = document.getElementById('log');
-    container.innerHTML = `<h3 style="color:var(--primary); font-size:0.8rem; margin-top:20px;">📂 Cartella: ${nome}</h3>`;
+    container.innerHTML = `<h3 style="color:var(--primary); font-size:0.8rem; margin: 15px 0 10px 0;">📂 Cartella: ${nome}</h3>`;
     
     if (!databaseSessioni[nome]) return;
 
@@ -82,18 +74,21 @@ function mostraLogFiltrato(nome) {
         const div = document.createElement('div');
         div.className = 'summary';
         div.innerHTML = `
-            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #eee; padding-bottom:5px; margin-bottom:8px;">
-                <span><b>${s.data} ${s.ora}</b> - ${s.circ}</span>
+            <div class="summary-header">
+                <span><b>${s.data} ${s.ora}</b><br>${s.circ}</span>
                 <div style="display:flex; gap:10px; align-items:center;">
                     <b style="color:var(--primary)">BEST: ${s.best}</b>
                     <button class="btn-delete" onclick="eliminaSessione('${nome}', ${s.id})">🗑️</button>
                 </div>
             </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.8rem;">
-                <div>⏱️ <b>Sess:</b> ${s.sess} (Pos: ${s.pos})</div>
-                <div>🌡️ <b>Meteo:</b> ${s.meteo} (${s.pista})</div>
-                <div style="grid-column:1/-1; background:#f9f9f9; padding:5px; border-radius:4px;">🔧 <b>Motore:</b> ${s.setupM}<br>🏎️ <b>Telaio:</b> ${s.setupT}</div>
-                <div style="grid-column:1/-1;">🛞 <b>Press:</b> ${s.press}</div>
+            <div class="summary-grid">
+                    <div style="grid-column:1/-1; background:#f9f9f9; padding:8px; border-radius:6px; margin-top:5px;">
+                    <div style="margin-bottom:4px;"> <b>Sessione:</b> ${s.sess} (Pos: ${s.pos})</div>
+                    <div style="margin-bottom:4px;"> <b>Meteo:</b> ${s.meteo} (${s.pista})</div>          
+                    <div style="margin-bottom:4px;"> <b>Motore:</b> ${s.setupM}</div>
+                    <div style="margin-bottom:4px;"> <b>Telaio:</b> ${s.setupT}</div>
+                    <div style="margin-bottom:4px;"> <b>Pressioni in/out:</b> ${s.press}</div>
+                </div>
             </div>`;
         container.appendChild(div);
     });
@@ -159,7 +154,7 @@ async function loadWeather() {
             document.getElementById('umidita').value = data.current.relative_humidity_2m;
             document.getElementById('temp_asfalto').value = (data.current.weather_code < 3) ? (data.current.temperature_2m + 12).toFixed(1) : (data.current.temperature_2m + 3).toFixed(1);
             document.getElementById('cond_meteo_live').value = data.current.weather_code < 3 ? "Sole" : "Variabile";
-            status.innerHTML = `✅ Meteo aggiornato alle ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+            status.innerHTML = `✅ Aggiornato alle ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
         }
     } catch (e) { status.innerText = "❌ Errore meteo."; }
 }
