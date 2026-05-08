@@ -1,13 +1,13 @@
 const CONFIG = {
     circuiti: [
         { nome: '7 Laghi (Castelletto di Branduzzo)', lat: 44.9754, lon: 9.1009, url: 'https://7laghikartitalia.it/', cal: 'https://7laghikartitalia.it/calendario-gare/' },
-        { nome: 'Ala Karting Circuit (Ala di Trento)', lat: 45.7481, lon: 10.9234, url: 'https://www.alakarting.it/', cal: 'https://www.alakarting.it/events/kart/' },
-        { nome: 'Circuito di Pomposa (Pomposa)', lat: 44.7127, lon: 12.216, url: 'http://www.circuitodipomposa.com/', cal: 'http://www.circuitodipomposa.com/calendario/' },
+        { nome: 'Ala Karting Circuit (Ala di Trento)', lat: 45.7481, lon: 10.9234, url: 'https://www.alakarting.it/', cal: 'https://www.alakarting.it/racing-nolo/kartodromo/gare/' },
+        { nome: 'Circuito di Pomposa (Pomposa)', lat: 44.7127, lon: 12.216, url: 'http://www.circuitodipomposa.com/', cal: 'https://www.circuitodipomposa.com/news/' },
         { nome: 'Cremona Circuit (San Martino del lago)', lat: 45.1633, lon: 10.3758, url: 'https://cremonacircuit.it/', cal: 'https://cremonacircuit.it/it/karting/calendario-kart/' },
         { nome: 'Franciacorta (Castrezzato)', lat: 45.5085, lon: 9.9472, url: 'https://www.franciacortakartingtrack.com/', cal: 'https://www.franciacortakartingtrack.com/calendar/' },
-        { nome: 'Happy Valley kart (Cervia)', lat: 44.23774, lon: 12.3558, url: 'http://www.happyvalleykart.com/', cal: 'http://www.happyvalleykart.com/calendario.html' },
-        { nome: 'Pista Winner (Nizza Monferrato)', lat: 44.7846, lon: 8.3745, url: 'http://www.pistawinner.it/', cal: 'http://www.pistawinner.it/calendario/' },
-        { nome: 'South Garda (Lonato)', lat: 45.4384, lon: 10.4902, url: 'https://www.southgardakarting.it/', cal: 'https://racing.southgardakarting.it/it/calendario' }
+        { nome: 'Happy Valley kart (Cervia)', lat: 44.23774, lon: 12.3558, url: 'http://www.happyvalleykart.com/', cal: 'https://happyvalleykart.com/calendario-eventi/' },
+        { nome: 'Pista Winner (Nizza Monferrato)', lat: 44.7846, lon: 8.3745, url: 'http://www.pistawinner.it/', cal: 'https://www.pistawinner.it/eventi/' },
+        { nome: 'South Garda (Lonato)', lat: 45.4384, lon: 10.4902, url: 'https://www.southgardakarting.it/', cal: 'https://racing.southgardakarting.it/calendario' }
     ],
     piloti: ['MATTIA', 'DANIEL', 'FILIPPO', 'BRANDO', 'SAMUELE', 'ANDREA', 'ROBERTO'],
     sessioni: ['PL1', 'PL2', 'PL3', 'PL4', 'PL5', 'PL6', 'PL7', 'PL8', 'PL9', 'Qualifica', 'S Race', 'M Race'],
