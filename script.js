@@ -135,7 +135,7 @@ function updateCircuitLink() {
         infoPista.innerHTML = `
             <div style="border-left: 3px solid var(--primary); padding-left: 10px;">
                 <strong>${pistaData.nome}</strong><br>
-                <small>Clicca il tasto sotto per verificare orari, turni privati e giornate di chiusura per gare.</small>
+                <small>Orari, turni privati e giornate di chiusura per gare.</small>
             </div>
         `;
 
