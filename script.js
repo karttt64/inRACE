@@ -36,6 +36,15 @@ document.addEventListener('DOMContentLoaded', inizializzaApp);
 function salvaSessione() {
     try {
         const p = getV('driver');
+        const checklistInputs = document.querySelectorAll('.check-item input[type="checkbox"]');
+        let checkStatus = [];
+        
+        checklistInputs.forEach(input => {
+            if(input.checked) {
+                checkStatus.push(input.parentElement.textContent.trim());
+            }
+        });
+
         const d = {
             id: Date.now(),
             data: new Date().toLocaleDateString(),
@@ -49,49 +58,67 @@ function salvaSessione() {
             pista: getV('cond_pista'),
             setupM: `Rapp: ${getV('rapporto')} | Spillo: ${getV('pos_spillo')} | Getto: ${getV('getto_max')} | Candela: ${getV('candela')}`,
             setupT: `Cb: ${getV('camber')} | Cs: ${getV('caster')} | Cv: ${getV('convergenza')} | H: ${getV('altezza_ant')}/${getV('altezza_post')} | Peso: ${getV('peso')}kg`,
-            press: `ANT: ${getV('as_in')}/${getV('as_out')} - ${getV('ad_in')}/${getV('ad_out')} | POST: ${getV('ps_in')}/${getV('ps_out')} - ${getV('pd_in')}/${getV('pd_out')}`
+            press: `ANT: ${getV('as_in')}/${getV('as_out')} - ${getV('ad_in')}/${getV('ad_out')} | POST: ${getV('ps_in')}/${getV('ps_out')} - ${getV('pd_in')}/${getV('pd_out')}`,
+            manutenzione: checkStatus.length > 0 ? checkStatus.join(", ") : "Nessuna"
         };
 
-        if (!databaseSessioni[p]) { databaseSessioni[p] = []; aggiungiTabFiltro(p); }
+        if (!databaseSessioni[p]) { 
+            databaseSessioni[p] = []; 
+            aggiungiTabFiltro(p); 
+        }
+        
         databaseSessioni[p].push(d);
         localStorage.setItem('kartLogDB', JSON.stringify(databaseSessioni));
+        
+        checklistInputs.forEach(input => input.checked = false);
+        
         mostraLogFiltrato(p);
         alert("Sessione salvata con successo!");
-    } catch (err) { alert("Errore nel salvataggio."); }
+    } catch (err) { 
+        console.error(err);
+        alert("Errore nel salvataggio."); 
+    }
 }
 
 function mostraLogFiltrato(nome) {
-    document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-    const btn = document.getElementById('btn-f-' + nome);
-    if (btn) btn.classList.add('active');
-
+    
     const container = document.getElementById('log');
+    if (!container) return;
+
+    
     container.innerHTML = `<h3 style="color:var(--primary); font-size:0.8rem; margin: 15px 0 10px 0;">📂 Cartella: ${nome}</h3>`;
     
-    if (!databaseSessioni[nome]) return;
+    if (!databaseSessioni[nome] || databaseSessioni[nome].length === 0) return;
 
     databaseSessioni[nome].slice().reverse().forEach(s => {
         const div = document.createElement('div');
         div.className = 'summary';
         div.innerHTML = `
             <div class="summary-header">
-                <span><b>${s.data} ${s.ora}</b><br>${s.circ}</span>
+                <span><b>${s.data} ${s.ora}</b> - ${s.circ}</span>
                 <div style="display:flex; gap:10px; align-items:center;">
                     <b style="color:var(--primary)">BEST: ${s.best}</b>
                     <button class="btn-delete" onclick="eliminaSessione('${nome}', ${s.id})">🗑️</button>
                 </div>
             </div>
             <div class="summary-grid">
-                    <div style="grid-column:1/-1; background:#f9f9f9; padding:8px; border-radius:6px; margin-top:5px;">
-                    <div style="margin-bottom:4px;"> <b>Sessione:</b> ${s.sess} (Pos: ${s.pos})</div>
-                    <div style="margin-bottom:4px;"> <b>Meteo:</b> ${s.meteo} (${s.pista})</div>          
-                    <div style="margin-bottom:4px;"> <b>Motore:</b> ${s.setupM}</div>
-                    <div style="margin-bottom:4px;"> <b>Telaio:</b> ${s.setupT}</div>
-                    <div style="margin-bottom:4px;"> <b>Pressioni in/out:</b> ${s.press}</div>
+                <div>${s.sess} (${s.pos}°)</div>
+                <div>${s.meteo}</div>
+                <div style="grid-column:1/-1; background:#f9f9f9; padding:8px; border-radius:6px; margin-top:5px; font-size:0.75rem;">
+                    <div>${s.setupM}</div>
+                    <div>${s.setupT}</div>
+                    <div>${s.press}</div>
+                    <div style="border-top:1px solid #ddd; margin:4px 0; padding-top:4px; color:var(--primary);"><b>Manutenzione:</b> ${s.manutenzione}</div>
+                    
                 </div>
             </div>`;
         container.appendChild(div);
     });
+
+    
+    document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.getElementById('btn-f-' + nome);
+    if (activeBtn) activeBtn.classList.add('active');
 }
 
 function aggiungiTabFiltro(n) {
