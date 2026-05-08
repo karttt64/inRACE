@@ -10,78 +10,100 @@
 <main class="main-wrapper">
     <header><img src="https://www.raceland.it/apple-icon.png?apple-icon.994b0f15.png" class="logo-img"></header>
     <h1>Setup Sessione</h1>
-
+    
     <section class="card">
-        <h2>☁️ Meteo Live</h2>
-        <select id="select_circuito" onchange="updateCircuitLink()"></select>
-        <a id="pista_url" href="#" target="_blank" style="display:none; margin: 10px 0;"> Vai al sito della pista</a>
-        <button class="btn btn-weather" onclick="loadWeather()">Aggiorna Meteo</button>
-        <div class="meteo-inline-container">
-            <div class="meteo-field"><label>Aria</label><input type="text" id="temp_aria" readonly class="input-readonly"></div>
-            <div class="meteo-field"><label>Asf.</label><input type="text" id="temp_asfalto" readonly class="input-readonly"></div>
-            <div class="meteo-field"><label>Umid.</label><input type="text" id="umidita" readonly class="input-readonly"></div>
-            <div class="meteo-field"><label>Stato</label><input type="text" id="cond_meteo_live" readonly class="input-readonly"></div>
-        </div>
-        <p id="weather-status"></p>
-    </section>
-
-    <section class="card">
-        <h2>⏱️ Performance</h2>
-        <div class="grid">
-            <div><label>Pilota</label><select id="driver"></select></div>
-            <div><label>Sessione</label><select id="sessione"></select></div>
-            <div><label>Pista</label><select id="cond_pista"></select></div>
-            <div><label>Gommatura</label><select id="gommatura"></select></div>
-            <div><label>Best Lap</label><input type="text" id="best" placeholder="48.726"></div>
-            <div><label>Posizione</label><select id="pos"></select></div>
-        </div>
-    </section>
-
-    <section class="card">
-        <h2>🏎️ Trasmissione</h2>
-        <div class="grid">
-            <div><label>Rapporto</label><select id="rapporto"></select></div>
-        </div>
-    </section>
-    <section class="card">
-        <h2>🏎️ Telaio</h2>
-        <div class="grid">
-            <div><label>Camber</label><select id="camber"></select></div>
-            <div><label>Caster</label><select id="caster"></select></div>
-            <div><label>Conv.</label><select id="convergenza"></select></div>
-            <div><label>Peso Kg</label><input type="number" id="peso" inputmode="numeric" placeholder="165"></div>
-            <div><label>Alt. ANT</label><select id="altezza_ant"></select></div>
-            <div><label>Alt. POST</label><select id="altezza_post"></select></div>
-        </div>
-    </section>
-    <section class="card">
-        <h2>🏎️ Motore</h2>
-        <div class="grid">
-            <div><label>Pos. spillo</label><select id="pos_spillo"></select></div>
-            <div><label>Candela</label><select id="candela"></select></div>
-        </div>
-    </section>
-
-    <section class="card">
-        <h2>🛞 Pressioni (Bar)</h2>
-        <div class="press-row">
-            <div class="press-block">
-                <label>ANT SX</label>
-                <div class="press-input-group">
-                    <input type="number" id="as_in" step="0.01" inputmode="decimal" placeholder="In" oninput="calcDelta()">
-                    <input type="number" id="as_out" step="0.01" inputmode="decimal" placeholder="Out" oninput="calcDelta()">
+        <div class="card-header-red">Meteo Live</div>        
+        <div class="card-body">
+            <select id="select_circuito" onchange="updateCircuitLink()"></select>
+            <a id="pista_url" href="#" target="_blank" style="display:none; margin: 10px 0;"> Vai al sito della pista</a>
+            
+            <button class="btn btn-weather" onclick="loadWeather()">Aggiorna Meteo</button>
+            
+            <div class="meteo-inline-container">
+                <div class="meteo-field">
+                    <label>Aria</label>
+                    <input type="text" id="temp_aria" readonly class="input-readonly">
                 </div>
-                <div id="d_as" class="delta-box">Δ: --</div>
-            </div>
-            <div class="press-block">
-                <label>ANT DX</label>
-                <div class="press-input-group">
-                    <input type="number" id="ad_in" step="0.01" inputmode="decimal" placeholder="In" oninput="calcDelta()">
-                    <input type="number" id="ad_out" step="0.01" inputmode="decimal" placeholder="Out" oninput="calcDelta()">
+                <div class="meteo-field">
+                    <label>Asf.</label>
+                    <input type="text" id="temp_asfalto" readonly class="input-readonly">
                 </div>
-                <div id="d_ad" class="delta-box">Δ: --</div>
+                <div class="meteo-field">
+                    <label>Umid.</label>
+                    <input type="text" id="umidita" readonly class="input-readonly">
+                </div>
+                <div class="meteo-field">
+                    <label>Stato</label>
+                    <input type="text" id="cond_meteo_live" readonly class="input-readonly">
+                </div>
             </div>
+    
+            <p id="weather-status" style="font-size:0.7rem; color:#666; margin-top:5px;"></p>
         </div>
+    </section>
+
+    <section class="card">
+        <div class="card-header-red">Performance</div>        
+        <div class="card-body">
+            <div class="grid">
+                <div><label>Pilota</label><select id="driver"></select></div>
+                <div><label>Sessione</label><select id="sessione"></select></div>
+                <div><label>Pista</label><select id="cond_pista"></select></div>
+                <div><label>Gommatura</label><select id="gommatura"></select></div>
+                <div><label>Best Lap</label><input type="text" id="best" placeholder="48.726"></div>
+                <div><label>Posizione</label><select id="pos"></select></div>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="card-header-red">Trasmissione</div>
+        <div class="card-body">
+            <div class="grid">
+                <div><label>Rapporto</label><select id="rapporto"></select></div>
+        </div>
+    </section>
+    <section class="card">
+        <div class="card-header-red">Telaio</div>
+        <div class="card-body">
+            <div class="grid">
+                <div><label>Camber</label><select id="camber"></select></div>
+                <div><label>Caster</label><select id="caster"></select></div>
+                <div><label>Conv.</label><select id="convergenza"></select></div>
+                <div><label>Peso Kg</label><input type="number" id="peso" inputmode="numeric" placeholder="165"></div>
+                <div><label>Alt. ANT</label><select id="altezza_ant"></select></div>
+                <div><label>Alt. POST</label><select id="altezza_post"></select></div>
+            </div>
+    </section>
+    <section class="card">
+        <div class="card-header-red">Motore</div>
+        <div class="card-body">
+            <div class="grid">
+                <div><label>Pos. spillo</label><select id="pos_spillo"></select></div>
+                <div><label>Candela</label><select id="candela"></select></div>
+            </div>
+    </section>
+
+    <section class="card">
+        <div class="card-header-red">Pressioni</div>
+        <div class="card-body">
+            <div class="press-row">
+                <div class="press-block">
+                    <label>ANT SX</label>
+                    <div class="press-input-group">
+                        <input type="number" id="as_in" step="0.01" inputmode="decimal" placeholder="In" oninput="calcDelta()">
+                        <input type="number" id="as_out" step="0.01" inputmode="decimal" placeholder="Out" oninput="calcDelta()">
+                    </div>
+                    <div id="d_as" class="delta-box">Δ: --</div>
+                </div>
+                <div class="press-block">
+                    <label>ANT DX</label>
+                    <div class="press-input-group">
+                        <input type="number" id="ad_in" step="0.01" inputmode="decimal" placeholder="In" oninput="calcDelta()">
+                        <input type="number" id="ad_out" step="0.01" inputmode="decimal" placeholder="Out" oninput="calcDelta()">
+                    </div>
+                    <div id="d_ad" class="delta-box">Δ: --</div>
+                </div>
+            </div>
         <div class="press-row">
             <div class="press-block">
                 <label>POST SX</label>

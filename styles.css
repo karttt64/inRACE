@@ -18,8 +18,50 @@ header { background: #111; padding: 25px; text-align: center; border-radius: var
 .logo-img { max-width: 140px; }
 h1 { text-align: center; text-transform: uppercase; font-weight: 800; font-size: 1.3rem; margin: 15px 0; }
 
-.card { background: var(--bg-card); border-radius: var(--radius); padding: 20px; margin-bottom: 15px; box-shadow: var(--shadow); border-top: 5px solid var(--primary); }
-h2 { font-size: 0.85rem; color: var(--primary); text-transform: uppercase; margin-bottom: 12px; font-weight: 700; border-bottom: 1px solid #eee; padding-bottom: 6px; }
+.card {
+  background: var(--bg-card);
+  border-radius: 12px; /* Arrotondamento card */
+  margin-bottom: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  
+  /* QUESTA RIGA RISOLVE IL PROBLEMA DEL CERCHIO GIALLO */
+  overflow: hidden; 
+  
+  display: flex;
+  flex-direction: column;
+  border: none; /* Rimuoviamo il vecchio border-top se presente */
+}
+
+.card-header-red {
+  background-color: var(--primary); /* Il tuo rosso #d32f2f */
+  color: white;
+  padding: 10px 15px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  
+  /* Assicuriamoci che non ci siano margini che creano spazi bianchi */
+  margin: 0; 
+}
+
+.card-body {
+  padding: 15px;
+  /* Opzionale: se vuoi un bordo sottile ai lati per definire meglio la card */
+  border: 1px solid #eee;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+}
+
+/* Modifica h2 per integrarsi con il nuovo header o rimuovilo se usi l'header */
+.card h2 { 
+  font-size: 0.85rem; 
+  color: var(--primary); 
+  text-transform: uppercase; 
+  margin-bottom: 12px; 
+  font-weight: 700; 
+  border-bottom: 1px solid #eee; 
+  padding-bottom: 6px; 
+}s
 
 label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; display: block; }
 input, select { width: 100%; height: 45px; border: 1px solid var(--border-color); border-radius: 8px; padding: 0 10px; font-size: 0.95rem; box-sizing: border-box; }
