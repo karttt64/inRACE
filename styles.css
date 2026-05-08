@@ -8,25 +8,49 @@
   --text-muted: #666;
   --border-color: #ddd;
   --radius: 12px;
-  --shadow: 0 8px 24px rgba(0,0,0,0.1);
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
-body { font-family: 'Segoe UI', sans-serif; background: var(--bg-body); margin: 0; padding: 15px; display: flex; justify-content: center; }
-.main-wrapper { width: 100%; max-width: 600px; }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-body);
+  margin: 0;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+}
+.main-wrapper {
+  width: 100%;
+  max-width: 600px;
+}
 
-header { background: #111; padding: 5px; text-align: center; border-radius: var(--radius); margin-bottom: 2px; }
-.logo-img { max-width: 240px; }
-h1 { text-align: center; text-transform: uppercase; font-weight: 800; font-size: 1.3rem; margin: 15px 0; }
+header {
+  background: #111;
+  padding: 5px;
+  text-align: center;
+  border-radius: var(--radius);
+  margin-bottom: 2px;
+}
+.logo-img {
+  max-width: 240px;
+}
+h1 {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 1.3rem;
+  margin: 15px 0;
+}
 
 .card {
   background: var(--bg-card);
   border-radius: 12px; /* Arrotondamento card */
   margin-bottom: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
   /* QUESTA RIGA RISOLVE IL PROBLEMA DEL CERCHIO GIALLO */
-  overflow: hidden; 
-  
+  overflow: hidden;
+
   display: flex;
   flex-direction: column;
   border: none; /* Rimuoviamo il vecchio border-top se presente */
@@ -39,9 +63,9 @@ h1 { text-align: center; text-transform: uppercase; font-weight: 800; font-size:
   font-size: 0.85rem;
   font-weight: bold;
   text-transform: uppercase;
-  
+
   /* Assicuriamoci che non ci siano margini che creano spazi bianchi */
-  margin: 0; 
+  margin: 0;
 }
 
 .card-body {
@@ -53,40 +77,150 @@ h1 { text-align: center; text-transform: uppercase; font-weight: 800; font-size:
 }
 
 /* Modifica h2 per integrarsi con il nuovo header o rimuovilo se usi l'header */
-.card h2 { 
-  font-size: 0.85rem; 
-  color: var(--primary); 
-  text-transform: uppercase; 
-  margin-bottom: 12px; 
-  font-weight: 700; 
-  border-bottom: 1px solid #eee; 
-  padding-bottom: 6px; 
-}s
+.card h2 {
+  font-size: 0.85rem;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  font-weight: 700;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
+}
+s label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: block;
+}
+input,
+select {
+  width: 100%;
+  height: 45px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
 
-label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; display: block; }
-input, select { width: 100%; height: 45px; border: 1px solid var(--border-color); border-radius: 8px; padding: 0 10px; font-size: 0.95rem; box-sizing: border-box; }
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.meteo-inline-container {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.input-readonly {
+  background-color: #f8f9fa !important;
+  text-align: center;
+  font-weight: bold;
+  border-style: dashed !important;
+}
 
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.meteo-inline-container { display: flex; gap: 6px; margin-top: 8px; }
-.input-readonly { background-color: #f8f9fa !important; text-align: center; font-weight: bold; border-style: dashed !important; }
+.press-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.press-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.press-input-group {
+  display: flex;
+  gap: 3px;
+}
+.press-input-group input {
+  flex: 1;
+  text-align: center;
+  padding: 0;
+  font-size: 0.85rem;
+}
 
-.press-row { display: flex; gap: 10px; margin-bottom: 12px; }
-.press-block { flex: 1; display: flex; flex-direction: column; }
-.press-input-group { display: flex; gap: 3px; }
-.press-input-group input { flex: 1; text-align: center; padding: 0; font-size: 0.85rem; }
+.delta-box {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: var(--primary);
+  background: #fff5f5;
+  border: 1px dashed var(--primary);
+  text-align: center;
+  padding: 2px 0;
+  border-radius: 4px;
+}
 
-.delta-box { margin-top: 4px; font-size: 0.7rem; font-weight: bold; color: var(--primary); background: #fff5f5; border: 1px dashed var(--primary); text-align: center; padding: 2px 0; border-radius: 4px; }
+.btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  height: 50px;
+  width: 100%;
+  border-radius: var(--radius);
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+.btn-weather {
+  background: var(--secondary) !important;
+  height: 45px;
+}
 
-.btn { background: var(--primary); color: white; border: none; height: 50px; width: 100%; border-radius: var(--radius); font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 8px; }
-.btn-weather { background: var(--secondary) !important; height: 45px; }
+.btn-filter {
+  background: white;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-bottom: 5px;
+}
+.btn-filter.active {
+  background: var(--primary);
+  color: white;
+}
 
-.btn-filter { background: white; border: 1px solid var(--primary); color: var(--primary); padding: 8px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; cursor: pointer; transition: 0.2s; margin-bottom: 5px; }
-.btn-filter.active { background: var(--primary); color: white; }
-
-.summary { background: #fff; border-left: 5px solid var(--primary); padding: 15px; margin-top: 12px; box-shadow: var(--shadow); border-radius: 8px; }
-.summary-header { border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.8rem; }
-.summary-section { grid-column: 1 / -1; background: #f8f9fa; padding: 6px; border-radius: 4px; font-weight: 600; font-size: 0.75rem; color: #555; margin-top: 5px; }
+.summary {
+  background: #fff;
+  border-left: 5px solid var(--primary);
+  padding: 15px;
+  margin-top: 12px;
+  box-shadow: var(--shadow);
+  border-radius: 8px;
+}
+.summary-header {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  font-size: 0.8rem;
+}
+.summary-section {
+  grid-column: 1 / -1;
+  background: #f8f9fa;
+  padding: 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: #555;
+  margin-top: 5px;
+}
 .btn-delete {
   background: #fff0f0;
   border: 1px solid #ffcccc;
@@ -117,29 +251,40 @@ input, select { width: 100%; height: 45px; border: 1px solid var(--border-color)
   align-items: center;
 }
 
-.checklist { 
-  display: flex; 
-  flex-direction: column; 
+.checklist {
+  display: flex;
+  flex-direction: column;
   align-items: left; /* Centra il blocco intero nella card */
-  gap: 5px; 
+  gap: 5px;
   width: 100%;
 }
-.check-item { 
-  display: flex; 
-  align-items: center; 
-  justify-content: flex-start; 
-  gap: 15px; 
+.check-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
   width: 250px; /* Larghezza fissa per mantenere l'allineamento delle checkbox */
-  font-size: 0.85rem; 
-  font-weight: 300;
+  font-size: 0.95rem;
+  font-weight: 400;
   text-transform: none; /* Testo normale per la checklist */
   cursor: pointer;
   color: #444;
 }
-.check-item input[type="checkbox"] { 
-  width: 22px; 
-  height: 22px; 
+.check-item input[type='checkbox'] {
+  width: 22px;
+  height: 22px;
   cursor: pointer;
   accent-color: var(--primary);
   margin: 0;
+}
+/* Colore azzurro per pressione in ingresso */
+.input-press-in {
+  background-color: #e3f2fd !important; /* Azzurro chiaro */
+  border-color: #bbdefb !important;
+}
+
+/* Colore rosso per pressione in uscita */
+.input-press-out {
+  background-color: #ffebee !important; /* Rosso chiaro */
+  border-color: #ffcdd2 !important;
 }
