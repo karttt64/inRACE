@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KartLog Pro - Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .welcome-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 30px;
+        }
+        .menu-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: var(--text-main);
+            transition: transform 0.2s;
+            border-left: 5px solid var(--primary);
+        }
+        .menu-card:hover { transform: scale(1.02); }
+        .menu-card h2 { margin: 0; font-size: 1.2rem; color: var(--primary); }
+        .menu-card p { margin: 10px 0 0; font-size: 0.9rem; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <main class="main-wrapper">
+        <header><img src="logo.svg" class="logo-img" alt="Logo"></header>
+        <a href="index.html" style="text-decoration:none; color:var(--primary); font-weight:bold; font-size:0.8rem;">← TORNA ALLA HOME</a>
+        <body>
+            <main class="card">
+                <section class="card-header-red">Regolazione della Carburazione</section>
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title h4 text-primary">Come i fattori influenzano l'aria</h2>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Altitudine:</strong> Più sali, più l'aria è rarefatta (meno ossigeno).</li>
+                                <li class="list-group-item"><strong>Temperatura:</strong> L'aria calda si espande (meno densa). L'aria fredda si contrae (più densa/più ossigeno).</li>
+                                <li class="list-group-item"><strong>Pressione:</strong> Alta pressione = aria più densa. Bassa pressione = aria meno densa.</li>
+                            </ul>
+                        <h2 class="card-title h4 text-primary">La Regola d'Oro della Regolazione</h2>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover table-custom bg-white">
+                                    <thead>
+                                        <tr>
+                                            <th>Fattore Climatico</th>
+                                            <th>Effetto Spontaneo</th>
+                                            <th>Intervento (Compensazione)</th>
+                                            <th>Azione sui Componenti</th>
+                                        </tr>
+                                    </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Alta Altitudine</strong></td>
+                                        <td>Si ingrassa</td>
+                                        <td><span class="highlight">Smagrire</span></td>
+                                        <td>Riduci getto max / Abbassa spillo</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Aria Fredda</strong> (Inverno)</td>
+                                        <td>Si smagrisce</td>
+                                        <td><span class="highlight">Ingrassare</span></td>
+                                        <td>Aumenta getto max / Chiudi vite aria</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Aria Calda</strong> (Estate)</td>
+                                        <td>Si ingrassa</td>
+                                        <td><span class="highlight">Smagrire</span></td>
+                                        <td>Riduci getto max / Apri vite aria</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Maltempo</strong> (Pressione Bassa)</td>
+                                        <td>Si ingrassa</td>
+                                        <td><span class="highlight">Smagrire</span></td>
+                                        <td>Smagrire leggermente</td>
+                                    </tr>
+                                </tbody>
+                                </table>
+                        <h2 class="card-title h4 text-primary">
+                            <table class="table table-bordered table-hover table-custom bg-white">
+                                <h2 class="card-title h4 text-primary">Vite Aria/Miscela</h2>
+                                <p class="small text-muted">Apertura: 0 - 1/4 gas</p>
+                                <p>Regola il circuito del minimo. È lo strumento ideale per piccoli aggiustamenti stagionali rapidi.</p>
+                            </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-custom bg-white">
+                            <h2 class="card-title h4 text-primary">Spillo Conico</h2>
+                            <p class="small text-muted">Apertura: 1/4 - 3/4 gas</p>
+                            <p>Spostare la clip in <strong>alto</strong> per smagrire (lo spillo scende) o in <strong>basso</strong> per ingrassare.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-custom bg-white">
+                            <h2 class="card-title h4 text-primary">Getto del Massimo</h2>
+                            <p class="small text-muted">Apertura: 3/4 - Pieno gas</p>
+                            <p>Fondamentale per non grippare. Aumenta il numero del getto per ingrassare la miscela agli alti giri.</p>
+                    </div>
+                </div>
+                </section>
+            </main>
+        </body>
+    </main>     
+</body>
+</html>
